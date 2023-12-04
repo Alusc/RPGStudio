@@ -6,6 +6,7 @@ export default function Lista() {
       source={require("../assets/imagens/imagem2.jpg")}
       style={styles.imagem}
     ></ImageBackground>
+    
   );
 }
 
