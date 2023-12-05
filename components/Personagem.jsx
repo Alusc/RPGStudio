@@ -6,16 +6,16 @@ import {
     Platform,
     Alert,
   } from "react-native";
-  import { removerItem, getLista } from "./dados";
+  import { removerItem } from "./armazenamento";
   export default function Personagem(props) {
     const handleExcluirItem = () => {
       if (Platform.OS == "web") {
-        if (window.confirm("Tem certeza que deseja excluir esse item?")) {
+        if (window.confirm("Tem certeza que deseja excluir esse personagem?")) {
           removerItem(props.id).then(props.onDelete);
         }
       } else {
         Alert.alert(
-          "Tem certeza que deseja excluir esse item?",
+          "Tem certeza que deseja excluir esse personagem?",
           `${props.item}`,
           [
             {
@@ -36,9 +36,7 @@ import {
     return (
       <View style={styles.container}>
         <Text style={styles.textItem}>{props.item}</Text>
-        <Text style={styles.textItemQuantidade}>
-          {props.quantidade == 1 ? "1 unidade" : `${props.quantidade} unidades`}
-        </Text>
+        
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.deleteButton} onPress={() => {
             handleExcluirItem();

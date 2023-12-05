@@ -4,9 +4,9 @@ export async function salvarItem(itemLista) {
   try {
     const lista = await getLista();
 
-    const alterar = lista.findIndex((item) => item.id === itemLista.id);
+    const alterarIndex = lista.findIndex((item) => item.id === itemLista.id);
 
-    if (alterar !== -1) lista.splice(alterar, 1, itemLista);
+    if (alterarIndex !== -1) lista.splice(alterarIndex, 1, itemLista);
     else lista.push(itemLista);
 
     const jsonValue = JSON.stringify(lista);

@@ -1,11 +1,20 @@
-import { StyleSheet, ImageBackground } from "react-native";
+import { StyleSheet, ImageBackground, View} from "react-native";
+
+import * as Armazenamento from "./armazenamento"
+
 
 export default function CriarPersonagem() {
   return (
     <ImageBackground
       source={require("../assets/imagens/imagem1.jpg")}
       style={styles.imagem}
-    ></ImageBackground>
+    >
+      <View>
+
+
+      </View>
+
+    </ImageBackground>
   );
 }
 
