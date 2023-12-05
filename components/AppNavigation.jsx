@@ -1,11 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Lista from "./Lista";
 import RolarDados from "./RolarDados";
 import CriarPersonagem from "./CriarPersonagem";
 import Icone from "./Icone";
-import { View } from "react-native-web";
+import { View } from "react-native";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -15,16 +16,20 @@ export default function AppNavigation() {
       <Tab.Navigator
         screenOptions={{
           tabBarLabelPosition: "below-icon",
+          tabBarShowLabel: false, 
+          tabBarIconStyle: {
+            height: 50,
+          },
+          //tabBarLabelStyle: 
           tabBarStyle: {
             backgroundColor: "white",
             borderBottomColor: "#050A30",
             borderBottomWidth: 2,
           },
 
-          tabBarIndicatorStyle: { backgroundColor: "tranparent" },
-          tabBarActiveTintColor: "gray",
-          tabBarInactiveTintColor: "black",
-          headerShown: false,
+          tabBarIndicatorStyle: { backgroundColor: "transparent" },
+          tabBarActiveTintColor: "black",
+          tabBarInactiveTintColor: "#232423",
         }}
         initialRouteName="Lista de Personagens"
       >
@@ -33,15 +38,24 @@ export default function AppNavigation() {
           component={CriarPersonagem}
           options={{
             tabBarIcon: ({ focused, color }) => {
-              const iconName = "pena";
-              const size = 70;
+              const iconName = "feather";
+              const size = 60;
               let tamanho = focused ? size * 1.1 : size;
               // Retornando a imagem
+              //return <Icone nome={iconName} tamanho={tamanho} cor={color} />;
               return (
-                  <Icone nome={iconName} tamanho={tamanho} cor={color} />
+                <MaterialCommunityIcons
+                  style={{
+                    alignSelf: "center",
+                    bottom: tamanho / 12,
+                  }}
+                  name={iconName}
+                  size={tamanho}
+                  color={color}
+                />
               );
             },
-            tabBarLabel: "",  
+            tabBarLabel: "",
           }}
         />
 
@@ -49,18 +63,25 @@ export default function AppNavigation() {
           name="Lista de Personagens"
           component={Lista}
           options={{
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName = focused ? "view-list" : "view-list-outline";
-              size = focused ? size * 1.5 : size;
+            tabBarIcon: ({ focused, color }) => {
+              const iconName = "script-text";
+              const size = 60;
+              let tamanho = focused ? size * 1.1 : size;
               // Retornando a imagem
-              /*return (
+              return (
                 <MaterialCommunityIcons
+                  style={{
+                    alignSelf: "center",
+                    bottom: tamanho / 10,
+                  }}
                   name={iconName}
-                  size={size}
+                  size={tamanho}
                   color={color}
                 />
-              );*/
+              );
             },
+            tabBarLabel: "Lista de Personagens",
+          
           }}
         />
 
@@ -68,18 +89,24 @@ export default function AppNavigation() {
           name="Rolar Dados"
           component={RolarDados}
           options={{
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName = focused ? "view-list" : "view-list-outline";
-              size = focused ? size * 1.5 : size;
+            tabBarIcon: ({ focused, color }) => {
+              const iconName = "dice-5";
+              const size = 60;
+              let tamanho = focused ? size * 1.1 : size;
               // Retornando a imagem
-              /*return (
+              return (
                 <MaterialCommunityIcons
+                  style={{
+                    alignSelf: "center",
+                    bottom: tamanho / 10,
+                  }}
                   name={iconName}
-                  size={size}
+                  size={tamanho}
                   color={color}
                 />
-              );*/
+              );
             },
+            tabBarLabel: "",
           }}
         />
       </Tab.Navigator>

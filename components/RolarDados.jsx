@@ -8,9 +8,7 @@ import {
   ImageBackground,
 } from "react-native";
 
-import {
-  Picker
-} from '@react-native-picker/picker';
+import { Picker } from "@react-native-picker/picker";
 
 export default function RolarDados() {
   const [dado, setDado] = useState("6");
@@ -21,8 +19,6 @@ export default function RolarDados() {
 
   const [resultado, setResultado] = useState(numeroAleatorio(1, 6));
 
-
-
   const rolarDado = (dado) => {
     const numeroDado = +dado;
     return numeroAleatorio(1, numeroDado);
@@ -30,10 +26,9 @@ export default function RolarDados() {
 
   return (
     <ImageBackground
-      source={require('../assets/imagens/imagem3.jpg')}
+      source={require("../assets/imagens/imagem3.jpg")}
       style={styles.imagem}
     >
-
       <View style={styles.viewPrimaria}>
         <View style={styles.viewTopo}>
           <Picker
@@ -64,26 +59,20 @@ export default function RolarDados() {
               );
 
               if (valorInput == "-" || valorInput == "")
-                setModificador(valorInput)
-              else if (isNaN(numeroIntervaloValido))
-                setModificador("0")
-              else
-                setModificador(numeroIntervaloValido);
+                setModificador(valorInput);
+              else if (isNaN(numeroIntervaloValido)) setModificador("0");
+              else setModificador(numeroIntervaloValido);
             }}
-
-            onBlur={
-              () => {
-                if (modificador == "" || modificador == "-") setModificador("0")
-              }
-            }
-
+            onBlur={() => {
+              if (modificador == "" || modificador == "-") setModificador("0");
+            }}
             value={modificador}
             keyboardType="numeric"
           />
         </View>
 
         <View style={styles.viewCentral}>
-          <View style={[styles.dado, /*dado=="4" ? styles.triangulo:*/ ""]}>
+          <View style={styles.dado}>
             <Text style={styles.textDado}>{resultado}</Text>
           </View>
 
@@ -91,11 +80,17 @@ export default function RolarDados() {
             style={styles.button}
             onPress={() => setResultado(rolarDado(dado))}
           >
-            <Text style={[styles.text, styles.textButton]}><b>Rolar</b></Text>
+            <Text style={[styles.text, styles.textButton]}>
+              <b>Rolar</b>
+            </Text>
           </TouchableOpacity>
 
           <Text style={[styles.text, styles.total]}>
-            Total <Text style={styles.textTotal}>{resultado + (isNaN(parseInt(modificador)) ? 0 : parseInt(modificador))}</Text>
+            Total{" "}
+            <Text style={styles.textTotal}>
+              {resultado +
+                (isNaN(parseInt(modificador)) ? 0 : parseInt(modificador))}
+            </Text>
           </Text>
         </View>
       </View>
@@ -104,12 +99,10 @@ export default function RolarDados() {
 }
 
 const styles = StyleSheet.create({
-
   imagem: {
     flex: 1,
-    resizeMode: 'stretch',
-    justifyContent: 'center',
-
+    resizeMode: "stretch",
+    justifyContent: "center",
   },
 
   viewPrimaria: {
@@ -123,8 +116,7 @@ const styles = StyleSheet.create({
   },
   viewTopo: {
     flexDirection: "row",
-    justifyContent: "space-between"
-
+    justifyContent: "space-between",
   },
   button: {
     backgroundColor: "#ebf4ff",
@@ -135,7 +127,6 @@ const styles = StyleSheet.create({
     height: 72,
     alignItems: "center",
     justifyContent: "center",
-    
   },
   textButton: {
     color: "#12229D",
@@ -154,7 +145,6 @@ const styles = StyleSheet.create({
   },
   textTotal: {
     fontSize: 50,
-
   },
   picker: {
     padding: 10,
@@ -173,7 +163,6 @@ const styles = StyleSheet.create({
     borderColor: "#120203",
     borderWidth: 4,
     backgroundColor: "#ebf4ff",
-
   },
   dado: {
     width: 125,
@@ -187,29 +176,11 @@ const styles = StyleSheet.create({
     shadowColor: "black",
     shadowRadius: 15,
     shadowOffset: { width: 12, height: 6 },
-    shadowOpacity: .9,
-    
-
+    shadowOpacity: 0.9,
   },
-
-  /*triangulo: {
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderLeftWidth: 62.5, // Metade da altura desejada (125/2)
-    borderRightWidth: 62.5, // Metade da altura desejada (125/2)
-    borderBottomWidth: 125, // Altura desejada
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: 'white', // Cor do triângulo
-    shadowOpacity: 0,
-    borderRadius: 0,
-  },*/
-
   textDado: {
     textAlign: "center",
     fontSize: 55,
     fontFamily: "Open Sans",
-  }
+  },
 });
