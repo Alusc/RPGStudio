@@ -5,8 +5,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Lista from "./Lista";
 import RolarDados from "./RolarDados";
 import CriarPersonagem from "./CriarPersonagem";
-import Icone from "./Icone";
-import { View } from "react-native";
+//import Icone from "./Icone";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -55,7 +54,6 @@ export default function AppNavigation() {
                 />
               );
             },
-            tabBarLabel: "",
           }}
         />
 
@@ -80,7 +78,6 @@ export default function AppNavigation() {
                 />
               );
             },
-            tabBarLabel: "Lista de Personagens",
           
           }}
         />
@@ -106,7 +103,6 @@ export default function AppNavigation() {
                 />
               );
             },
-            tabBarLabel: "",
           }}
         />
       </Tab.Navigator>

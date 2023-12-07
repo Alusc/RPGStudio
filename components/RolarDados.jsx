@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 
 export default function RolarDados() {
   const [dado, setDado] = useState("6");
-  const [modificador, setModificador] = useState(0);
+  const [modificador, setModificador] = useState("0");
 
   const numeroAleatorio = (min, max) =>
     Math.round(Math.random() * (max - min) + min);
@@ -35,7 +35,7 @@ export default function RolarDados() {
             style={[styles.text, styles.picker]}
             selectedValue={dado}
             onValueChange={setDado}
-            mode="dialog"
+            itemStyle={styles.picker}
           >
             <Picker.Item label="d4" value="4" />
             <Picker.Item label="d6" value="6" />
@@ -47,8 +47,8 @@ export default function RolarDados() {
 
           <TextInput
             style={[styles.text, styles.modificador]}
-            onChange={(e) => {
-              const valorInput = e.target.value;
+            onChangeText={(text) => {
+              const valorInput = text;
 
               const valorMinimo = -999;
               const valorMaximo = 999;
@@ -58,10 +58,10 @@ export default function RolarDados() {
                 valorMaximo
               );
 
-              if (valorInput == "-" || valorInput == "")
+              if (valorInput == "-" || valorInput === "")
                 setModificador(valorInput);
               else if (isNaN(numeroIntervaloValido)) setModificador("0");
-              else setModificador(numeroIntervaloValido);
+              else setModificador(numeroIntervaloValido.toString());
             }}
             onBlur={() => {
               if (modificador == "" || modificador == "-") setModificador("0");
@@ -81,7 +81,7 @@ export default function RolarDados() {
             onPress={() => setResultado(rolarDado(dado))}
           >
             <Text style={[styles.text, styles.textButton]}>
-              <b>Rolar</b>
+              Rolar
             </Text>
           </TouchableOpacity>
 
@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
     shadowOffset: { width: 12, height: 6 },
     shadowOpacity: 0.9,
+    elevation: 5,
   },
   textDado: {
     textAlign: "center",
