@@ -5,6 +5,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Lista from "./Lista";
 import RolarDados from "./RolarDados";
 import CriarPersonagem from "./CriarPersonagem";
+import { StatusBar } from "react-native";
 //import Icone from "./Icone";
 
 const Tab = createMaterialTopTabNavigator();
@@ -18,12 +19,14 @@ export default function AppNavigation() {
           tabBarShowLabel: false, 
           tabBarIconStyle: {
             height: 50,
+            width: 50,
           },
           //tabBarLabelStyle: 
           tabBarStyle: {
             backgroundColor: "white",
             borderBottomColor: "#050A30",
             borderBottomWidth: 2,
+            marginTop: StatusBar.currentHeight,
           },
 
           tabBarIndicatorStyle: { backgroundColor: "transparent" },
@@ -38,7 +41,7 @@ export default function AppNavigation() {
           options={{
             tabBarIcon: ({ focused, color }) => {
               const iconName = "feather";
-              const size = 60;
+              const size = 50;
               let tamanho = focused ? size * 1.1 : size;
               // Retornando a imagem
               //return <Icone nome={iconName} tamanho={tamanho} cor={color} />;
@@ -63,14 +66,14 @@ export default function AppNavigation() {
           options={{
             tabBarIcon: ({ focused, color }) => {
               const iconName = "script-text";
-              const size = 60;
+              const size = 50;
               let tamanho = focused ? size * 1.1 : size;
               // Retornando a imagem
               return (
                 <MaterialCommunityIcons
                   style={{
                     alignSelf: "center",
-                    bottom: tamanho / 10,
+                    bottom: tamanho * 2 / 25,
                   }}
                   name={iconName}
                   size={tamanho}
@@ -88,14 +91,14 @@ export default function AppNavigation() {
           options={{
             tabBarIcon: ({ focused, color }) => {
               const iconName = "dice-5";
-              const size = 60;
+              const size = 50;
               let tamanho = focused ? size * 1.1 : size;
               // Retornando a imagem
               return (
                 <MaterialCommunityIcons
                   style={{
                     alignSelf: "center",
-                    bottom: tamanho / 10,
+                    bottom: tamanho * 3 / 50,
                   }}
                   name={iconName}
                   size={tamanho}

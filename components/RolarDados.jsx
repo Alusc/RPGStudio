@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
+  useWindowDimensions,
 } from "react-native";
 
+import  Select  from "./Select"
 import { Picker } from "@react-native-picker/picker";
 
 export default function RolarDados() {
@@ -18,6 +20,8 @@ export default function RolarDados() {
     Math.round(Math.random() * (max - min) + min);
 
   const [resultado, setResultado] = useState(numeroAleatorio(1, 6));
+
+  const { height, width } = useWindowDimensions();
 
   const rolarDado = (dado) => {
     const numeroDado = +dado;
@@ -31,19 +35,22 @@ export default function RolarDados() {
     >
       <View style={styles.viewPrimaria}>
         <View style={styles.viewTopo}>
-          <Picker
-            style={[styles.text, styles.picker]}
+        <Select 
+          style={[styles.text, styles.picker]}
             selectedValue={dado}
-            onValueChange={setDado}
-            itemStyle={styles.picker}
-          >
-            <Picker.Item label="d4" value="4" />
-            <Picker.Item label="d6" value="6" />
-            <Picker.Item label="d8" value="8" />
-            <Picker.Item label="d10" value="10" />
-            <Picker.Item label="d12" value="12" />
-            <Picker.Item label="d20" value="20" />
-          </Picker>
+            onValueChange={(value) => setDado(value)}
+            options={[
+              { label: 'd4', value: 4 },
+              { label: 'd6', value: 6 },
+              { label: 'd8', value: 8 },
+              { label: 'd10', value: 10 },
+              { label: 'd12', value: 12 },
+              { label: 'd20', value: 20 },
+            ]}
+
+          
+          />
+
 
           <TextInput
             style={[styles.text, styles.modificador]}
@@ -58,13 +65,13 @@ export default function RolarDados() {
                 valorMaximo
               );
 
-              if (valorInput == "-" || valorInput === "")
+              if (valorInput == "-" || valorInput == "." || valorInput === "")
                 setModificador(valorInput);
               else if (isNaN(numeroIntervaloValido)) setModificador("0");
               else setModificador(numeroIntervaloValido.toString());
             }}
             onBlur={() => {
-              if (modificador == "" || modificador == "-") setModificador("0");
+              if (modificador == "" || modificador == "." || modificador == "-") setModificador("0");
             }}
             value={modificador}
             keyboardType="numeric"
@@ -79,10 +86,9 @@ export default function RolarDados() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => setResultado(rolarDado(dado))}
+            activeOpacity={.5}
           >
-            <Text style={[styles.text, styles.textButton]}>
-              Rolar
-            </Text>
+            <Text style={[styles.text, styles.textButton]}>Rolar</Text>
           </TouchableOpacity>
 
           <Text style={[styles.text, styles.total]}>
@@ -99,6 +105,9 @@ export default function RolarDados() {
 }
 
 const styles = StyleSheet.create({
+  keyboard: {
+    flex: 1,
+  },
   imagem: {
     flex: 1,
     resizeMode: "stretch",
@@ -177,7 +186,7 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
     shadowOffset: { width: 12, height: 6 },
     shadowOpacity: 0.9,
-    elevation: 5,
+    elevation: 1,
   },
   textDado: {
     textAlign: "center",
