@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     fontSize: 30,
-    fontFamily: 'Open Sans',
+    fontFamily: "Open Sans",
     padding: 10,
     color: "#5474de",
   },
