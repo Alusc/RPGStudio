@@ -1,12 +1,15 @@
-import { StyleSheet, ImageBackground } from "react-native";
+import { StyleSheet, ImageBackground, ScrollView, Text } from "react-native";
 
 export default function Lista() {
   return (
     <ImageBackground
       source={require("../assets/imagens/imagem2.jpg")}
       style={styles.imagem}
-    ></ImageBackground>
-    
+    >
+      <ScrollView style={{ flex: 1 }}>
+        <Text>Sus</Text>
+      </ScrollView>
+    </ImageBackground>
   );
 }
 

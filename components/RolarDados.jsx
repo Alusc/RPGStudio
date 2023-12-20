@@ -10,7 +10,6 @@ import {
 } from "react-native";
 
 import Select from "./Select";
-import { Picker } from "@react-native-picker/picker";
 
 export default function RolarDados() {
   const [dado, setDado] = useState("6");
@@ -21,7 +20,11 @@ export default function RolarDados() {
 
   const [resultado, setResultado] = useState(numeroAleatorio(1, 6));
 
-  const { height, width } = useWindowDimensions();
+  //const { height, width } = useWindowDimensions();
+
+  //console.log(height, width);
+
+
 
   const rolarDado = (dado) => {
     const numeroDado = +dado;
@@ -105,9 +108,6 @@ export default function RolarDados() {
 }
 
 const styles = StyleSheet.create({
-  keyboard: {
-    flex: 1,
-  },
   imagem: {
     flex: 1,
     resizeMode: "stretch",
@@ -185,8 +185,10 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
     shadowOffset: { width: 12, height: 6 },
     shadowOpacity: 0.9,
-    elevation: 1,
+    elevation: 20,
   },
+
+  sombraDado: {},
   textDado: {
     textAlign: "center",
     fontSize: 55,

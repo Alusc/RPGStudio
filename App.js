@@ -12,6 +12,7 @@ export default function App() {
   const [fontsLoaded, fontError] = useFonts({
     "Hanken Grotesk": require("./assets/fonts/HankenGrotesk-Regular.ttf"),
     "Open Sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+    "Kalnia": require("./assets/fonts/Kalnia-Regular.ttf")
   });
 
   const onLayoutRootView = useCallback(async () => {
