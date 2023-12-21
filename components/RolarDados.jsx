@@ -177,7 +177,8 @@ const styles = StyleSheet.create({
     height: 125,
     margin: 95,
     borderRadius: 18,
-    backgroundColor: "white",
+    //backgroundColor: "white",
+    backgroundColor: "#0c0c12",
     alignContent: "center",
     justifyContent: "center",
     textAlign: "center",
@@ -185,11 +186,11 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
     shadowOffset: { width: 12, height: 6 },
     shadowOpacity: 0.9,
-    elevation: 20,
+    elevation: 30,
   },
 
-  sombraDado: {},
   textDado: {
+    color: "white",
     textAlign: "center",
     fontSize: 55,
     fontFamily: "Open Sans",

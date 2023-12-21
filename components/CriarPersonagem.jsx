@@ -10,9 +10,9 @@ import {
 import { useState } from "react";
 import * as Armazenamento from "./armazenamento";
 
-export default function CriarPersonagem() {
+export default function CriarPersonagem({ navigation }) {
   const [nome, setNome] = useState("");
-  const [nivel, setNivel] = useState(0);
+  const [nivel, setNivel] = useState("1");
 
   const [atributos, setAtributos] = useState({
     forca: "0",
@@ -25,30 +25,58 @@ export default function CriarPersonagem() {
   const [classes, setClasses] = useState([]);
   const [racas, setRacas] = useState([]);
   const [classe, setClasse] = useState("");
-  const [raca, setRaca] = useState("human");
+  const [raca, setRaca] = useState("");
+  const [id, setId] = useState(new Date().getTime());
 
   const handleChangeAtributo = (atributo, novoValor) => {
     setAtributos((atributos) => ({
       ...atributos,
       [atributo]: novoValor.toString(),
     }));
-    console.log(atributos);
+  };
+
+  const handleCriarPersonagem = () => {
+    const personagem = {
+      id: id,
+      nome: nome,
+      classe: classe,
+      raca: raca,
+      atributos: atributos,
+      nivel: nivel,
+    };
+
+    Armazenamento.salvarItem(personagem).then(() => {
+      console.log(personagem);
+      setNome("");
+      setId(new Date().getTime());
+      setNivel("1");
+      setClasse("");
+      setRaca("");
+      setAtributos({
+        forca: "0",
+        destreza: "0",
+        constituicao: "0",
+        inteligencia: "0",
+        sabedoria: "0",
+        carisma: "0",
+      });
+      navigation.navigate("Lista", personagem);
+    });
   };
 
   const criarAtributos = () => {
     return Object.keys(atributos).map((atributo) => (
-      <View style={{ flexDirection: "row", margin: 10 }}>
+      <View key={atributo} style={{ flexDirection: "row", margin: 10 }}>
         <Text style={styles.textAtributo}>
           {atributo.toString().substring(0, 3).toUpperCase() + " "}
         </Text>
         <TextInput
-          key={atributo}
           style={styles.numeroAtributo}
           onChangeText={(novoValor) => {
             const valorInput = novoValor;
 
-            const valorMinimo = -20;
-            const valorMaximo = 20;
+            const valorMinimo = -5;
+            const valorMaximo = 50;
 
             const numeroIntervaloValido = Math.min(
               Math.max(valorInput, valorMinimo),
@@ -84,16 +112,55 @@ export default function CriarPersonagem() {
       <ScrollView style={{ flex: 1 }}>
         <View style={styles.viewPrimaria}>
           <Text style={styles.textSubtitulos}>Quem é você?</Text>
-          <View style={styles.viewNome}>
-            <View style={{ flexDirection: "row", margin: 10 }}>
-              <Text>A</Text>
-              <TextInput>A</TextInput>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <View style={styles.viewCaracteristicas}>
+              <Text style={styles.textCaracteristica}>Nome: </Text>
+              <TextInput
+                style={styles.textInputCaracteristica}
+                value={nome}
+                onChangeText={setNome}
+              ></TextInput>
             </View>
-            <View style={{ flexDirection: "row", margin: 10 }}>
-              <TextInput>B</TextInput>
+            <View style={styles.viewCaracteristicas}>
+              <Text style={styles.textCaracteristica}>Classe: </Text>
+              <TextInput
+                style={styles.textInputCaracteristica}
+                value={classe}
+                onChangeText={setClasse}
+              ></TextInput>
             </View>
-            <View style={{ flexDirection: "row", margin: 10 }}>
-              <TextInput>C</TextInput>
+            <View style={styles.viewCaracteristicas}>
+              <Text style={styles.textCaracteristica}>Raça: </Text>
+              <TextInput
+                style={styles.textInputCaracteristica}
+                value={raca}
+                onChangeText={setRaca}
+              ></TextInput>
+            </View>
+            <View style={[styles.viewCaracteristicas, { width: 125 }]}>
+              <Text style={[styles.textCaracteristica, { flex: 3 }]}>
+                Nível:{" "}
+              </Text>
+              <TextInput
+                value={nivel}
+                onChangeText={(text) => {
+                  if (text === "") setNivel("");
+                  else if (isNaN(+text) || text < 1) setNivel("1");
+                  else if (text > 20) setNivel("20");
+                  else setNivel(text);
+                }}
+                onBlur={() => {
+                  if (nivel === "") setNivel("1");
+                }}
+                onFocus={() => {
+                  setNivel("");
+                }}
+                style={[
+                  styles.textInputCaracteristica,
+                  { textAlign: "center", fontFamily: "Open Sans" },
+                ]}
+                keyboardType="numeric"
+              ></TextInput>
             </View>
           </View>
 
@@ -101,7 +168,7 @@ export default function CriarPersonagem() {
           <View style={styles.viewAtributos}>{criarAtributos()}</View>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => console.log(atributos)}
+            onPress={() => handleCriarPersonagem()}
           >
             <Text style={styles.textButton}>Criar</Text>
           </TouchableOpacity>
@@ -125,9 +192,31 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  viewNome: {
-    justifyContent: "center",
+  viewCaracteristicas: {
+    flexDirection: "row",
     alignItems: "center",
+    margin: 9,
+    marginHorizontal: 0,
+    backgroundColor: "#ebf4ff",
+    padding: 8,
+    borderRadius: 10,
+    borderWidth: 4,
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    width: 225,
+  },
+  textCaracteristica: {
+    fontFamily: "Open Sans",
+    fontSize: 18,
+    fontWeight: "bold",
+    flex: 1,
+  },
+  textInputCaracteristica: {
+    flex: 2.1,
+    fontSize: 18,
+    fontFamily: "Hanken Grotesk",
+    padding: 0,
+    borderBottomWidth: 1,
   },
   button: {
     backgroundColor: "#ebf4ff",
@@ -152,10 +241,10 @@ const styles = StyleSheet.create({
   textSubtitulos: {
     fontSize: 25,
     fontFamily: "Hanken Grotesk",
-    margin: 20,
-    marginBottom: 10,
+    margin: 16,
+    marginTop: 30,
     padding: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
     color: "white",
     borderWidth: 1,
     borderBottomWidth: 4,
@@ -181,7 +270,7 @@ const styles = StyleSheet.create({
     flex: 0.25,
     width: 75,
     color: "black",
-    backgroundColor: "white",
+    backgroundColor: "#ebf4ff",
     textAlign: "center",
     height: 100,
     borderWidth: 6,

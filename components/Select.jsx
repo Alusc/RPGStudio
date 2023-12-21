@@ -71,10 +71,6 @@ export default function Select(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 20,
-    marginLeft: 20,
-  },
   modalContainer: {
     flex: 1,
     margin: 15,

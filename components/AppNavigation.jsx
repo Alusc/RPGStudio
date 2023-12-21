@@ -61,7 +61,7 @@ export default function AppNavigation() {
         />
 
         <Tab.Screen
-          name="Lista de Personagens"
+          name="Lista"
           component={Lista}
           options={{
             tabBarIcon: ({ focused, color }) => {
