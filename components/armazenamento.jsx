@@ -6,6 +6,7 @@ export async function salvarItem(itemLista) {
 
     const alterarIndex = lista.findIndex((item) => item.id === itemLista.id);
 
+    console.log(alterarIndex)
     if (alterarIndex !== -1) lista.splice(alterarIndex, 1, itemLista);
     else lista.push(itemLista);
 

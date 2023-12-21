@@ -6,11 +6,17 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Modal,
+  FlatList,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as Armazenamento from "./armazenamento";
 
-export default function CriarPersonagem({ navigation }) {
+export default function CriarPersonagem({ navigation, route }) {
+  const [metodo, setMetodo] = route.params
+    ? useState("editar")
+    : useState("criar");
+
   const [nome, setNome] = useState("");
   const [nivel, setNivel] = useState("1");
 
@@ -22,11 +28,65 @@ export default function CriarPersonagem({ navigation }) {
     sabedoria: "0",
     carisma: "0",
   });
-  const [classes, setClasses] = useState([]);
-  const [racas, setRacas] = useState([]);
   const [classe, setClasse] = useState("");
   const [raca, setRaca] = useState("");
   const [id, setId] = useState(new Date().getTime());
+
+  useEffect(() => {
+    if (route.params) {
+      setMetodo("editar");
+      setNome(route.params["nome"]);
+      setNivel(route.params["nivel"]);
+      setAtributos(route.params["atributos"]);
+      setClasse(route.params["classe"]);
+      setRaca(route.params["raca"]);
+      setId(route.params["id"]);
+    }
+  }, [route.params]);
+
+  const [classes, setClasses] = useState([]);
+  const [modalClasseVisible, setModalClasseVisible] = useState(false);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await fetch("https://www.dnd5eapi.co/api/classes");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        const names = data.results.map((dndClass) => dndClass.name);
+        setClasses(names);
+      } catch (error) {
+        console.error("Error fetching classes:", error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
+
+  const [racas, setRacas] = useState([]);
+  const [modalRacaVisible, setModalRacaVisible] = useState(false);
+
+  useEffect(() => {
+    const fetchRacas = async () => {
+      try {
+        const response = await fetch("https://www.dnd5eapi.co/api/races");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        const names = data.results.map((dndClass) => dndClass.name);
+        setRacas(names);
+      } catch (error) {
+        console.error("Error fetching races:", error);
+      }
+    };
+
+    fetchRacas();
+  }, []);
 
   const handleChangeAtributo = (atributo, novoValor) => {
     setAtributos((atributos) => ({
@@ -46,12 +106,12 @@ export default function CriarPersonagem({ navigation }) {
     };
 
     Armazenamento.salvarItem(personagem).then(() => {
-      console.log(personagem);
       setNome("");
       setId(new Date().getTime());
       setNivel("1");
       setClasse("");
       setRaca("");
+      setMetodo("criar");
       setAtributos({
         forca: "0",
         destreza: "0",
@@ -111,7 +171,38 @@ export default function CriarPersonagem({ navigation }) {
     >
       <ScrollView style={{ flex: 1 }}>
         <View style={styles.viewPrimaria}>
-          <Text style={styles.textSubtitulos}>Quem é você?</Text>
+          {metodo == "editar" ? (
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text style={styles.textSubtitulos}>Edição de personagem</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setMetodo("criar");
+                  setNome("");
+                  setId(new Date().getTime());
+                  setNivel("1");
+                  setClasse("");
+                  setRaca("");
+                  setMetodo("criar");
+                  setAtributos({
+                    forca: "0",
+                    destreza: "0",
+                    constituicao: "0",
+                    inteligencia: "0",
+                    sabedoria: "0",
+                    carisma: "0",
+                  });
+                  navigation.navigate("Lista", []);
+                }}
+                style={[styles.button, { backgroundColor: "#c8d3e0" }]}
+              >
+                <Text style={[styles.textButton, { fontSize: 20 }]}>
+                  Cancelar edição
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <Text style={styles.textSubtitulos}>Quem é você?</Text>
+          )}
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <View style={styles.viewCaracteristicas}>
               <Text style={styles.textCaracteristica}>Nome: </Text>
@@ -121,15 +212,49 @@ export default function CriarPersonagem({ navigation }) {
                 onChangeText={setNome}
               ></TextInput>
             </View>
-            <View style={styles.viewCaracteristicas}>
+            <View
+              style={styles.viewCaracteristicas}
+              onFocus={() => setModalClasseVisible(true)}
+            >
               <Text style={styles.textCaracteristica}>Classe: </Text>
+              <TouchableOpacity></TouchableOpacity>
               <TextInput
                 style={styles.textInputCaracteristica}
                 value={classe}
                 onChangeText={setClasse}
               ></TextInput>
             </View>
-            <View style={styles.viewCaracteristicas}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalClasseVisible}
+              onRequestClose={() => setModalClasseVisible(false)}
+            >
+              <View style={styles.modalContainer}>
+                <Text style={styles.tituloText}>Defina sua Classe</Text>
+                <FlatList
+                  data={classes}
+                  keyExtractor={(index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setClasse(item);
+                          setModalClasseVisible(false);
+                        }}
+                      >
+                        <Text style={styles.optionText}>{item}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                />
+                <TouchableOpacity onPress={() => setModalClasseVisible(false)}>
+                  <Text style={styles.cancelText}>Sair</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+            <View style={styles.viewCaracteristicas} 
+              onFocus={() => setModalRacaVisible(true)}>
               <Text style={styles.textCaracteristica}>Raça: </Text>
               <TextInput
                 style={styles.textInputCaracteristica}
@@ -137,6 +262,35 @@ export default function CriarPersonagem({ navigation }) {
                 onChangeText={setRaca}
               ></TextInput>
             </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalRacaVisible}
+              onRequestClose={() => setModalRacaVisible(false)}
+            >
+              <View style={styles.modalContainer}>
+                <Text style={styles.tituloText}>Defina sua Raça</Text>
+                <FlatList
+                  data={racas}
+                  keyExtractor={(index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setRaca(item);
+                          setModalRacaVisible(false);
+                        }}
+                      >
+                        <Text style={styles.optionText}>{item}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                />
+                <TouchableOpacity onPress={() => setModalRacaVisible(false)}>
+                  <Text style={styles.cancelText}>Sair</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
             <View style={[styles.viewCaracteristicas, { width: 125 }]}>
               <Text style={[styles.textCaracteristica, { flex: 3 }]}>
                 Nível:{" "}
@@ -170,7 +324,9 @@ export default function CriarPersonagem({ navigation }) {
             style={styles.button}
             onPress={() => handleCriarPersonagem()}
           >
-            <Text style={styles.textButton}>Criar</Text>
+            <Text style={styles.textButton}>
+              {metodo == "criar" ? "Criar" : "Editar"}
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -205,6 +361,31 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     width: 225,
   },
+  
+  cancelText: {
+    textAlign: "center",
+    fontSize: 30,
+    fontFamily: "Open Sans",
+    padding: 0,
+    color: "#5474de",
+  },
+  tituloText: {
+    fontSize: 25,
+    padding: 15,
+    margin: 5,
+    color: "white",
+  },
+  optionText: {
+    fontSize: 20,
+    padding: 5,
+    margin: 0,
+    fontFamily: "Hanken Grotesk",
+    color: "white",
+    borderWidth: 1,
+    width: 200,
+    backgroundColor: "black",
+    borderColor: "white",
+  },
   textCaracteristica: {
     fontFamily: "Open Sans",
     fontSize: 18,
@@ -217,6 +398,17 @@ const styles = StyleSheet.create({
     fontFamily: "Hanken Grotesk",
     padding: 0,
     borderBottomWidth: 1,
+  },
+  modalContainer: {
+    flex: 1,
+    margin: 15,
+    marginVertical: 120,
+    padding: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.92)",
+    borderRadius: 20,
+    borderColor: "#d7e3fa",
+    borderWidth: 4,
+    alignItems: "center",
   },
   button: {
     backgroundColor: "#ebf4ff",

@@ -1,4 +1,3 @@
-
 import {
   StyleSheet,
   Text,
@@ -7,7 +6,7 @@ import {
   Platform,
   Alert,
   Modal,
-  FlatList,
+  ScrollView,
 } from "react-native";
 import { removerItem } from "./armazenamento";
 import { useState } from "react";
@@ -38,11 +37,10 @@ export default function Personagem(props) {
     }
   };
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.textItem}>{props.nome}</Text>
-      <Text>{props.classe + " nível " + props.nivel}</Text>
+      <Text>{props.classe + " level " + props.nivel}</Text>
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
@@ -72,42 +70,99 @@ export default function Personagem(props) {
             },
           ]}
           onPress={() => {
-          setModalVisible(true);
+            setModalVisible(true);
           }}
         >
           <Text style={styles.buttonText}>Ver</Text>
         </TouchableOpacity>
 
         <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.optionText}>
-            Nome: {props.nome}
-          </Text>
-          <Text style={styles.optionText}>
-            Classe: {props.classe}
-          </Text>
-          <Text style={styles.optionText}>
-            Raça: {props.raca}
-          </Text>
-          <Text style={styles.optionText}>
-            Nível: {props.nivel}
-          </Text>
-          <Text style={styles.optionText}>
-            Atributos: {Object.keys(props.atributos).map(chave => props.atributos[chave])}
-          </Text>
-          
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <ScrollView style={{ flex: 1 }}>
+              <Text style={styles.optionText}>
+                <Text style={{ color: "#a3adbf" }}>Nome: </Text>
+                {props.nome}
+              </Text>
+              <Text style={styles.optionText}>
+                <Text style={{ color: "#a3adbf" }}>Classe: </Text>{" "}
+                {props.classe}
+              </Text>
+              <Text style={styles.optionText}>
+                <Text style={{ color: "#a3adbf" }}>Raça: </Text> {props.raca}
+              </Text>
+              <Text style={styles.optionText}>
+                <Text style={{ color: "#a3adbf" }}>Nível: </Text> {props.nivel}
+              </Text>
+              <View
+                style={[
+                  styles.optionText,
+                  { borderColor: "white", borderTopWidth: 0 },
+                ]}
+              >
+                <Text style={styles.atributosText}>Atributos: </Text>
+                <View style={{ margin: 5 }}>
+                  <Text
+                    style={[
+                      styles.atributosText,
+                      { color: "white", fontSize: 15 },
+                    ]}
+                  >
+                    Força: {props.atributos["forca"]}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.atributosText,
+                      { color: "white", fontSize: 15 },
+                    ]}
+                  >
+                    Destreza: {props.atributos["destreza"]}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.atributosText,
+                      { color: "white", fontSize: 15 },
+                    ]}
+                  >
+                    Constituição: {props.atributos["constituicao"]}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.atributosText,
+                      { color: "white", fontSize: 15 },
+                    ]}
+                  >
+                    Inteligência: {props.atributos["inteligencia"]}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.atributosText,
+                      { color: "white", fontSize: 15 },
+                    ]}
+                  >
+                    Sabedoria: {props.atributos["sabedoria"]}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.atributosText,
+                      { color: "white", fontSize: 15 },
+                    ]}
+                  >
+                    Carisma: {props.atributos["carisma"]}
+                  </Text>
+                </View>
+              </View>
 
-          <TouchableOpacity onPress={() => setModalVisible(false)}>
-            <Text style={styles.cancelText}>Sair</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Text style={styles.cancelText}>Sair</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </Modal>
       </View>
     </View>
   );
@@ -133,12 +188,12 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 15,
     marginVertical: 120,
-    alignItems: "center",
     padding: 20,
     backgroundColor: "rgba(0, 0, 0, 0.92)",
     borderRadius: 20,
     borderColor: "#d7e3fa",
     borderWidth: 4,
+    alignItems: "center",
   },
   editButton: {
     height: 35,
@@ -163,17 +218,26 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
+  atributosText: {
+    fontSize: 20,
+    color: "#a3adbf",
+  },
   optionText: {
     fontSize: 20,
-    padding: 2,
-    margin: 5,
-    fontFamily: "Open Sans",
+    padding: 5,
+    margin: 0,
+    fontFamily: "Hanken Grotesk",
     color: "white",
+    borderWidth: 1,
+    width: 200,
+    backgroundColor: "black",
+    borderBottomColor: "white",
   },
   cancelText: {
+    textAlign: "center",
     fontSize: 30,
     fontFamily: "Open Sans",
-    padding: 10,
+    padding: 0,
     color: "#5474de",
   },
   textItem: {

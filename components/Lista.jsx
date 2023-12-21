@@ -19,11 +19,7 @@ export default function Lista(props) {
   const atualizarLista = () => getLista().then(setLista);
 
   const editarPersonagem = (personagem) => props.navigation.navigate('Criar Personagem', personagem)
-
   
-
-  console.log(lista)
-
   return (
     <ImageBackground
       source={require("../assets/imagens/imagem2.jpg")}
